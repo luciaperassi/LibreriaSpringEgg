@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Autor</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css"/>
+  </head>
+  <body>
+    <div>
+      <br> 
+      <br>
+      <h1 class="principaltittle">Proyecto Librería Egg</h1>
+      <br>
+      <div  class="paragraph">
+       <br>
+      <h4>Ejercicio guía de Programación Web:</h4>
+      <h4> Simulación de Sistema de Guardado de una Librería Web</h4>      
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+  </div>
+    <button>
+        <a th:href="@{/autor/formnewbook}">Cargar libro</a>
+    </button>
+     <button>
+        <a th:href="@{/autor/booklist}">Ver lista de libros</a>
+    </button>
+    <button>
+        <a th:href="@{/autor/formdisablebook}">Deshabilitar libro</a>
+    </button>
+     <button>
+        <a th:href="@{/autor/formdenablebook}">Habilitar libro</a>
+    </button>
+    <button>
+        <a th:href="@{/autor/formmodifybook}">Modificar libro</a>
+    </button>
+    <button>
+        <a th:href="@{/autor/lookforbook}">Buscar libro por id</a>
+    </button>
+  </body>
+</html>

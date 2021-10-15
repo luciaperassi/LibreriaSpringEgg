@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Lista de Libros</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Lista de libros</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Isbn</th>
+                    <th>Titulo</th>
+                    <th>Año de publicación</th>
+                    <th>Ejemplares</th>
+                    <th>Ejemplares prestados</th>
+                    <th>Ejemplares restantes</th>
+                    <th>Alta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="a,iterator:${books}">
+                    <td th:text="${a.id}"></td>
+                    <td th:text="${a.isbn}"></td>
+                    <td th:text="${a.titulo}"></td>
+                    <td th:text="${a.anio}"></td>
+                    <td th:text="${a.ejemplares}"></td>
+                    <td th:text="${a.ejemplaresPrestados}"></td>
+                    <td th:text="${a.ejemplaresRestantes}"></td>
+                    <td th:text="${a.alta}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

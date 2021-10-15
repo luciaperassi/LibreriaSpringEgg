@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Editorial</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <button>
+        <a th:href="@{/editorial/formneweditorial}">Cargar editorial</a>
+    </button>
+     <button>
+        <a th:href="@{/editorial/editoriallist}">Ver lista de editoriales</a>
+    </button>
+    <button>
+        <a th:href="@{/editorial/formdisableeditorial}">Deshabilitar editorial</a>
+    </button>
+     <button>
+        <a th:href="@{/editorial/formdenableeditorial}">Habilitar editorial</a>
+    </button>
+    <button>
+        <a th:href="@{/editorial/formmodifyeditorial}">Modificar editorial</a>
+    </button>
+    <button>
+        <a th:href="@{/editorial/lookforeditorial}">Buscar editorial por id</a>
+    </button>
+  </body>
+</html>

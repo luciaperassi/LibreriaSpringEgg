@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Buscar autor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form th:action="@{/autor/disableautor}" method="POST">
+        <div>Buscar autor por id</div>
+        <label>Id</label>
+        <input type="text" name="id">
+        <br>
+        <input type="submit"> 
+        </form>
+        </body>
+</html>
