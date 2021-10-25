@@ -19,28 +19,35 @@ public class EditorialService {
     private EditorialRepository editorialrepository;
 
     @Transactional
-    public void newEditorial(String nombre) throws ExceptionService {
+    public Editorial newEditorial(Editorial editorial) throws ExceptionService {
+         if (editorial.getNombre().isEmpty() || editorial.getNombre() == null) {
+            throw new ExceptionService("El nombre de la editorial no puede ser nulo.");
+        }
+        return editorialrepository.save(editorial);
+    }
+
+    @Transactional
+    public Editorial newEditorial(String nombre) throws ExceptionService {
         validation(nombre);
         Editorial editorial = new Editorial();
         editorial.setNombre(nombre);
         editorial.setAlta(Boolean.TRUE);
 
-        editorialrepository.save(editorial);
+        return editorialrepository.save(editorial);
     }
 
+     @Transactional
+    public void delete(Editorial editorial){
+        editorialrepository.delete(editorial);
+    }
+    
     @Transactional
-    public void modifyEditorial(String id, String nombre) throws ExceptionService {
-        validation(nombre);
-
-        Optional<Editorial> answer = editorialrepository.findById(id);
-        if (answer.isPresent()) {
-            Editorial editorial = answer.get();
-            editorial.setNombre(nombre);
-
-            editorialrepository.save(editorial);
-        } else {
-            throw new ExceptionService("No se encontró la editorial solicitada.");
+    public void deleteById(String id){
+        Optional<Editorial> editorial = editorialrepository.findById(id);
+        if (editorial.isPresent()) {
+            editorialrepository.delete(editorial.get());
         }
+        
     }
 
     @Transactional
@@ -69,14 +76,8 @@ public class EditorialService {
         }
     }
 
-    public void lookUp(String id) throws ExceptionService {
-        Optional<Editorial> answer = editorialrepository.findById(id);
-        if (answer.isPresent()) {
-            Editorial editorial = answer.get();
-            System.out.println(editorial.toString());
-        } else {
-            throw new ExceptionService("No se encontró la editorial solicitada.");
-        }
+    public Optional<Editorial> lookUp(String id) throws ExceptionService {
+        return editorialrepository.findById(id);
     }
 
     private void validation(String nombre) throws ExceptionService {
@@ -85,7 +86,19 @@ public class EditorialService {
         }
     }
 
+    public Editorial findById(Editorial editorial) {
+        Optional<Editorial> optional = editorialrepository.findById(editorial.getId());
+            if (optional.isPresent()) {
+                editorial = optional.get();
+            }
+        return editorial;
+    }
+    
     public List<Editorial> listAll() {
         return editorialrepository.findAll();
+    }
+
+    public List<Editorial> listAllByQ(String q) {
+        return editorialrepository.findAllByQ("%" + q + "%");
     }
 }

@@ -1,22 +1,76 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Deshabilitar autor</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <form th:action="@{/autor/disableautor}" method="POST">
-        <div>Deshabilitar autor</div>
-        <label>Id</label>
-        <input type="text" name="id">
-        <br>
-        <input type="submit"> 
-        </form>
-        </body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="head :: dark-head">
+    <title>Deshabilitar autor</title>
+</head>
+
+<body>
+    <div>
+        <div class="w-auto p-3" style="background-image: url(https://fondosmil.com/fondo/1678.jpg)">
+            <div>
+                <nav th:replace="nav-bar :: nav-bar-dark"></nav>
+                <br>
+                <br>
+                <br>
+                <div class="container"
+                    style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19));width: 800px;  border-radius: 30px;">
+                    <br>
+                    <br>
+                    <br>
+                    <div style="text-align: center; justify-content: space-evenly; display: flex;">
+                        <div
+                            style="opacity:100%;background-color: salmon; width:600px; height:350px; align-items: center;border-radius: 30px;">
+                            <br>
+                            <br>
+                            <br>
+
+                            <form th:action="@{/autor/disableautor}" method="POST"
+                                style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">
+                                <div class="mb-3">
+                                    <br>
+                                    <h4>Deshabilitar autor</h4>
+                                    <p th:if="${error != null}" th:text="${error}"></p>
+                                    <br>
+                                    <label class="form-label">Id autor</label>
+                                    <input type="text" name="id">
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-outline-light btn-dark">Deshabilitar</button>
+                            </form>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <div style="
+                align-items: center;
+                justify-content: center;
+                display: flex;
+              ">
+                        <button type="submit" class="btn btn-outline-light btn-dark">
+                            <a th:href="@{/autor}">Volver</a>
+                        </button>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+
+
+                <br>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
 </html>

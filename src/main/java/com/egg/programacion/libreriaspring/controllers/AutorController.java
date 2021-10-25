@@ -1,14 +1,19 @@
 package com.egg.programacion.libreriaspring.controllers;
 
+import com.egg.programacion.libreriaspring.entities.Autor;
 import com.egg.programacion.libreriaspring.exceptions.ExceptionService;
 import com.egg.programacion.libreriaspring.servicies.AutorService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
  * @author Lucía
@@ -19,70 +24,84 @@ public class AutorController {
 
     @Autowired
     private AutorService autorservice;
-    
+
     @GetMapping
-    public String autor(){
+    public String autor() {
         return "autor.html";
     }
-    
+
     @GetMapping("/autorlist")
-    public String autorList(Model model) {
-        model.addAttribute("autors", autorservice.listAll());
+    public String autorList(Model model, @RequestParam(required = false) String q) {
+        if (q != null) {
+            model.addAttribute("autors", autorservice.listAllByQ(q));
+        } else {
+            model.addAttribute("autors", autorservice.listAll());
+        }
         return "autor-list";
     }
-    
+
     @GetMapping("/formnewautor")
-    public String formNewAutor() {
+    public String formNewAutor(Model model, @RequestParam(required = false) String id) throws ExceptionService {
+        if (id != null) {
+            Optional<Autor> autor = autorservice.lookUp(id);
+            if (autor.isPresent()) {
+                model.addAttribute("autor", autor.get());
+            } else {
+                return "redirect:/autorlist";
+            }
+        } else {
+            model.addAttribute("autor", new Autor());
+        }
         return "new-autor-form";
     }
-    
+
     @PostMapping("/savenewautor")
-    public String saveNewAutor(String nombre) throws ExceptionService{
-        autorservice.newAutor(nombre);
-        return "redirect:autor/autorlist";
-    }
-
-    @GetMapping("/formmodifyautor")
-    public String formModifyAutor() {
-        return "modify-autor-form";
-    }
-
-    @PostMapping("/savemodifyautor")
-    public String saveModifyAutor(@RequestParam String id,@RequestParam String nombre) throws ExceptionService {
-      autorservice.modifyAutor(id, nombre);
-        return "redirect:autor/autorlist";
+    public String saveNewAutor(RedirectAttributes redirectattributes, Model model, @ModelAttribute Autor autor) throws ExceptionService {
+        try {
+            autorservice.newAutor(autor);
+            redirectattributes.addFlashAttribute("succes", "Autor guardado con éxito.");
+        } catch (ExceptionService e) {
+            redirectattributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:autorlist";
     }
 
     @GetMapping("/formdisableautor")
     public String formDisableAutor() {
         return "disable-autor-form";
     }
-    
+
     @PostMapping("/disableautor")
-    public String disableAutor(String id) throws ExceptionService {
-        autorservice.disableAutor(id);
-        return "redirect:/autorlist";
+    public String disableAutor(ModelMap model, @RequestParam String id) throws ExceptionService {
+        try {
+            autorservice.disableAutor(id);
+            return "redirect:autorlist";
+        } catch (ExceptionService e) {
+            model.put("error", e.getMessage());
+            return "redirect:formdisableautor";
+        }
     }
 
     @GetMapping("/formdenableautor")
     public String formEnableAutor() {
         return "enable-autor-form";
     }
-    
+
     @PostMapping("/enableautor")
-    public String enableAutor(String id) throws ExceptionService {
-        autorservice.enableAutor(id);
-        return "redirect:autor/autorlist";
-    }
-    
-    @GetMapping("/lookforautor")
-    public String formLookForAutor(){
-        return "look-for-autor-form";
+    public String enableAutor(ModelMap model, @RequestParam String id) throws ExceptionService {
+        try {
+            autorservice.enableAutor(id);
+            return "redirect:autorlist";
+        } catch (ExceptionService e) {
+            model.put("error", e.getMessage());
+            return "redirect:formdenableautor";
+        }
     }
 
-    @PostMapping("/lookforautor")
-    public String lookForAutor(String id) throws ExceptionService {
-        autorservice.lookUp(id);
-        return "redirect:autor/autorlist";
+    @GetMapping("/delete")
+    public String deleteAutor(@RequestParam(required = true) String id) {
+        autorservice.deleteById(id);
+        return "redirect:autorlist";
     }
+
 }

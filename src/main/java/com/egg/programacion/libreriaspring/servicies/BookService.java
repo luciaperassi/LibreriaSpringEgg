@@ -25,9 +25,45 @@ public class BookService {
     private AutorRepository autorrepository;
     @Autowired
     private EditorialRepository editorialrepository;
+    @Autowired
+    private AutorService autorservice;
+    @Autowired
+    private EditorialService editorialservice;
 
     @Transactional
-    public void newBook(String idAutor, String idEditorial, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Boolean alta) throws ExceptionService {
+    public Book newBook(Book book)  throws ExceptionService{
+        if (book.getTitulo() == null || book.getTitulo().isEmpty()) {
+            throw new ExceptionService("El titulo del libro no puede ser nulo.");
+        }
+
+        if (book.getEjemplaresPrestados() > book.getEjemplares()) {
+            throw new ExceptionService("La cantidad de ejemplares prestados no puede superar la cantidad de ejemplares totales");
+        }
+
+        if (book.getEjemplaresRestantes() > book.getEjemplares()) {
+            throw new ExceptionService("La cantidad de ejemplares restantes no puede superar la cantidad de ejemplares totales");
+        }
+
+        if (book.getEjemplaresPrestados() + book.getEjemplaresRestantes() > book.getEjemplares()) {
+            throw new ExceptionService("La cantidad de ejemplares restantes + prestados no puede superar la cantidad de ejemplares totales");
+        }
+
+        if (book.getAutor() == null) {
+            throw new ExceptionService("El/la autor/a del libro no puede ser nulo/a.");
+        }else{
+            book.setAutor(autorservice.findById(book.getAutor()));
+        }
+
+        if (book.getEditorial() == null) {
+            throw new ExceptionService("La editorial del libro no puede ser nula.");
+        }else{
+            book.setEditorial(editorialservice.findById(book.getEditorial()));
+        }
+         return bookrepository.save(book);
+    }
+    
+    @Transactional
+    public Book newBook(String idAutor, String idEditorial, Long isbn, String titulo, Integer anio, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes, Boolean alta) throws ExceptionService {
         validation(idAutor, idEditorial, titulo, ejemplares, ejemplaresPrestados, ejemplaresRestantes);
 
         Book book = new Book();
@@ -54,7 +90,20 @@ public class BookService {
         book.setIsbn(isbn);
         book.setTitulo(titulo);
 
-        bookrepository.save(book);
+        return bookrepository.save(book);
+    }
+    
+    @Transactional
+    public void delete(Book book) {
+        bookrepository.delete(book);
+    }
+
+    @Transactional
+    public void deleteById(String id) {
+        Optional<Book> book = bookrepository.findById(id);
+        if (book.isPresent()) {
+            bookrepository.delete(book.get());
+        }
     }
 
     @Transactional
@@ -117,22 +166,18 @@ public class BookService {
         }
     }
 
-    public void lookForBook(String id) throws ExceptionService {
-        Optional<Book> answer = bookrepository.findById(id);
-        if (answer.isPresent()) {
-            Book book = answer.get();
-            System.out.println(book.toString());
-
-            bookrepository.save(book);
-        } else {
-            throw new ExceptionService("No se encontró el libro solicitado");
-        }
+    public Optional<Book> lookForBook(String id) throws ExceptionService {
+        return bookrepository.findById(id);
     }
 
     public List<Book> listAll() {
         return bookrepository.findAll();
     }
 
+     public List<Book> listAllByQ(String q) {
+        return bookrepository.findAllByQ("%"+q+"%");
+    }
+     
     private void validation(String autor, String editorial, String titulo, Integer ejemplares, Integer ejemplaresPrestados, Integer ejemplaresRestantes) throws ExceptionService {
         if (titulo == null || titulo.isEmpty()) {
             throw new ExceptionService("El titulo del libro no puede ser nulo.");

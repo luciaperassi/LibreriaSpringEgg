@@ -19,27 +19,33 @@ public class AutorService {
     private AutorRepository autorRepository;
 
     @Transactional
-    public void newAutor(String nombre) throws ExceptionService {
+    public Autor newAutor(Autor autor) throws ExceptionService {
+        if (autor.getNombre().isEmpty() || autor.getNombre() == null) {
+            throw new ExceptionService("El nombre del/la autor/a no puede ser nulo.");
+        }
+        return autorRepository.save(autor);
+    }
+
+    @Transactional
+    public Autor newAutor(String nombre) throws ExceptionService {
         validation(nombre);
         Autor autor = new Autor();
         autor.setNombre(nombre);
         autor.setAlta(Boolean.TRUE);
 
-        autorRepository.save(autor);
+        return autorRepository.save(autor);
     }
 
     @Transactional
-    public void modifyAutor(String id, String nombre) throws ExceptionService {
-        validation(nombre);
+    public void delete(Autor autor) {
+        autorRepository.delete(autor);
+    }
 
-        Optional<Autor> answer = autorRepository.findById(id);
-        if (answer.isPresent()) {
-            Autor autor = answer.get();
-            autor.setNombre(nombre);
-
-            autorRepository.save(autor);
-        } else {
-            throw new ExceptionService("No se encontró el autor solicitado.");
+    @Transactional
+    public void deleteById(String id) {
+        Optional<Autor> autor = autorRepository.findById(id);
+        if (autor.isPresent()) {
+            autorRepository.delete(autor.get());
         }
     }
 
@@ -69,14 +75,8 @@ public class AutorService {
         }
     }
 
-    public void lookUp(String id) throws ExceptionService {
-        Optional<Autor> answer = autorRepository.findById(id);
-        if (answer.isPresent()) {
-            Autor autor = answer.get();
-            System.out.println(autor.toString());
-        } else {
-            throw new ExceptionService("No se encontró el autor solicitado.");
-        }
+    public Optional<Autor> lookUp(String id) throws ExceptionService {
+        return autorRepository.findById(id);
     }
 
     private void validation(String nombre) throws ExceptionService {
@@ -89,4 +89,16 @@ public class AutorService {
         return autorRepository.findAll();
     }
 
+    public List<Autor> listAllByQ(String q) {
+        return autorRepository.findAllByQ("%" + q + "%");
+    }
+
+     public Autor findById(Autor autor) {
+         Optional<Autor> optional = autorRepository.findById(autor.getId());
+            if (optional.isPresent()) {
+                autor = optional.get();
+            }
+        return autor;
+    }
+    
 }

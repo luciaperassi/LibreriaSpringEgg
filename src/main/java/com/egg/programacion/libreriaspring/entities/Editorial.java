@@ -16,7 +16,7 @@ public class Editorial {
     @GenericGenerator(name="uuid", strategy = "uuid2")
     private String id;
     private String nombre;
-    Boolean alta;
+    Boolean alta=true;
 
     public String getId() {
         return id;
