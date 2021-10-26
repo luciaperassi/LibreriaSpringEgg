@@ -10,10 +10,17 @@
         class="w-auto p-3"
         style="background-image: url(https://fondosmil.com/fondo/1678.jpg)"
       >
-        <div>
+        <div  class="container">
           <nav th:replace="nav-bar :: nav-bar-dark"></nav>
-          <br />
-          <br />
+          <br>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
           <br />
           <div class="container" style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19));width: 800px;  border-radius: 30px;">
             <br />
@@ -29,7 +36,7 @@
             <div
               style="
                 opacity: 100%;
-                background-color: seagreen;
+                background-color: whitesmoke;
                 border-radius: 30px;
                 width: 600px;
                 height: 350px;
@@ -51,7 +58,6 @@
                 <div class="mb-3">
                   <br />
                   <h4>Habilitar libro</h4>
-                  <p th:if="${error != null}" th:text="${error}"></p>
                   <br />
                   <label class="form-label">Id libro</label>
                   <input type="text" name="id" />

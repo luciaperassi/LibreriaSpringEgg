@@ -7,12 +7,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /*
  * @author Lucía
@@ -40,29 +40,36 @@ public class EditorialController {
     }
 
     @GetMapping("/formneweditorial")
-    public String formNewEditorial(Model model, @RequestParam(required=false) String id) throws ExceptionService {
-        if(id!=null){
-            Optional<Editorial> editorial = editorialservice.lookUp(id);
-            if(editorial.isPresent()){
-                model.addAttribute("editorial",editorial.get());
-            }else{
-                return "redirect:/editoriallist";
+    public String formNewEditorial(Model model, @RequestParam(required = false) String id) {
+        try {
+            if (id != null) {
+                Optional<Editorial> editorial = editorialservice.lookUp(id);
+                if (editorial.isPresent()) {
+                    model.addAttribute("editorial", editorial.get());
+                } else {
+                    return "redirect:/editoriallist";
+                }
+            } else {
+                model.addAttribute("editorial", new Editorial());
             }
-        }else{
-            model.addAttribute("editorial",new Editorial());
+        } catch (ExceptionService e) {
+            model.addAttribute("error", e.getMessage());
         }
+
         return "new-editorial-form";
     }
 
     @PostMapping("/saveneweditorial")
-    public String saveNewEditorial(ModelMap model,@ModelAttribute Editorial editorial) throws ExceptionService {
+    public String saveNewEditorial(RedirectAttributes redirectattributes, Model model, @ModelAttribute Editorial editorial) {
         try {
             editorialservice.newEditorial(editorial);
+            redirectattributes.addFlashAttribute("success", "Editorial guardada con éxito.");
             return "redirect:editoriallist";
         } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
+            redirectattributes.addFlashAttribute("error", e.getMessage());
             return "redirect:formneweditorial";
         }
+        
     }
 
     @GetMapping("/formdisableeditorial")
@@ -71,14 +78,18 @@ public class EditorialController {
     }
 
     @PostMapping("/disableeditorial")
-    public String disableEditorial(ModelMap model,String id) throws ExceptionService {
-         try {
-            editorialservice.disableEditorial(id);
-            return "redirect:editoriallist";
-        } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
-            return "redirect:disableeditorial";
+    public String disableEditorial(RedirectAttributes redirectattributes, Model model, String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
+            return "redirect:formdisableeditorial";
         }
+        try {
+            editorialservice.disableEditorial(id);
+            redirectattributes.addFlashAttribute("success", "Editorial dada de baja con éxito.");
+        } catch (ExceptionService e) {
+            redirectattributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:editoriallist";
     }
 
     @GetMapping("/formenableeditorial")
@@ -87,18 +98,23 @@ public class EditorialController {
     }
 
     @PostMapping("/enableeditorial")
-    public String enableEditorial(ModelMap model,String id) throws ExceptionService {
+    public String enableEditorial(RedirectAttributes redirectattributes, Model model, String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
+            return "redirect:formenableeditorial";
+        }
         try {
             editorialservice.enableAutor(id);
-            return "redirect:editoriallist";
+            redirectattributes.addFlashAttribute("success", "Editorial dada de alta con éxito.");
         } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
-            return "redirect:enableeditorial";
+            redirectattributes.addFlashAttribute("error", e.getMessage());
+            //si usas el add solo del redirectattributes muestra el error en el link
         }
+        return "redirect:/editorial/editoriallist";
     }
 
-     @GetMapping("/delete")
-    public String deleteEditorial(@RequestParam(required=true) String id){
+    @GetMapping("/delete")
+    public String deleteEditorial(@RequestParam(required = true) String id) {
         editorialservice.deleteById(id);
         return "redirect:editoriallist";
     }

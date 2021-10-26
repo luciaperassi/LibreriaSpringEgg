@@ -9,14 +9,27 @@
       class="w-auto p-3"
       style="background-image: url(https://fondosmil.com/fondo/1678.jpg)"
     >
-      <div>
+      <div class="container">
         <nav th:replace="nav-bar :: nav-bar-dark"></nav>
+        <br>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+          <span th:text="${error}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${success}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       </div>
-      <br />
-      <br />
-      <br />
-      <br />
+      
       <div class="container" style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19)); border-radius: 30px;">
+        
+      <br />
+      <br />
+      
+      <br />
+      <br />
+    
         <div
           style="align-items: center; justify-content: center; display: flex"
         >
@@ -26,6 +39,7 @@
           <br />
           <br />
           <br />
+         
           <h1
             style="
               font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman',
@@ -106,16 +120,16 @@
             <a th:href="@{/autor}">Volver</a>
           </button>
           <button type="submit" class="btn btn-outline-light btn-dark">
-            <a th:href="@{/autor/formnewautor}">Nuevo/a  autor/a</a>
+            <a th:href="@{/autor/formnewautor}" target="_blank">Nuevo/a  autor/a</a>
           </button>
           <button
                     type="button"
                     class="btn btn-outline-light btn-dark"
                   >
-                    <a th:href="@{/autor/formdisableautor}">Deshab. autor</a>
+                    <a th:href="@{/autor/formdisableautor}" target="_blank">Deshab. autor</a>
                   </button>
                   <button type="button" class="btn btn-outline-light btn-dark">
-                    <a th:href="@{/autor/formdenableautor}">Habilitar autor</a>
+                    <a th:href="@{/autor/formdenableautor}" target="_blank">Habilitar autor</a>
                   </button>
         </div>
         <br />

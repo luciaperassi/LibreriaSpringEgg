@@ -20,6 +20,10 @@ public class AutorService {
 
     @Transactional
     public Autor newAutor(Autor autor) throws ExceptionService {
+        if (findByName(autor.getNombre()) != null) {
+            throw new ExceptionService("El nombre del/la autor/a ya está registrado en la base de datos.");
+        }
+
         if (autor.getNombre().isEmpty() || autor.getNombre() == null) {
             throw new ExceptionService("El nombre del/la autor/a no puede ser nulo.");
         }
@@ -28,7 +32,9 @@ public class AutorService {
 
     @Transactional
     public Autor newAutor(String nombre) throws ExceptionService {
-        validation(nombre);
+        if (nombre == null || nombre.isEmpty()) {
+            throw new ExceptionService("El nombre del/la autor/a no puede ser nulo.");
+        }
         Autor autor = new Autor();
         autor.setNombre(nombre);
         autor.setAlta(Boolean.TRUE);
@@ -58,7 +64,7 @@ public class AutorService {
 
             autorRepository.save(autor);
         } else {
-            throw new ExceptionService("No se encontró el autor solicitado.");
+            throw new ExceptionService("No se encontró el/la autor/a solicitado/a.");
         }
     }
 
@@ -71,18 +77,12 @@ public class AutorService {
 
             autorRepository.save(autor);
         } else {
-            throw new ExceptionService("No se encontró el autor solicitado.");
+            throw new ExceptionService("No se encontró el/la autor/a solicitado/a.");
         }
     }
 
     public Optional<Autor> lookUp(String id) throws ExceptionService {
         return autorRepository.findById(id);
-    }
-
-    private void validation(String nombre) throws ExceptionService {
-        if (nombre == null || nombre.isEmpty()) {
-            throw new ExceptionService("El nombre del/la autor/a no puede ser nulo.");
-        }
     }
 
     public List<Autor> listAll() {
@@ -93,12 +93,16 @@ public class AutorService {
         return autorRepository.findAllByQ("%" + q + "%");
     }
 
-     public Autor findById(Autor autor) {
-         Optional<Autor> optional = autorRepository.findById(autor.getId());
-            if (optional.isPresent()) {
-                autor = optional.get();
-            }
+    public Autor findByName(String name) {
+        return autorRepository.findByName(name);
+    }
+
+    public Autor findById(Autor autor) {
+        Optional<Autor> optional = autorRepository.findById(autor.getId());
+        if (optional.isPresent()) {
+            autor = optional.get();
+        }
         return autor;
     }
-    
+
 }

@@ -8,10 +8,17 @@
 <body>
     <div>
         <div class="w-auto p-3" style="background-image: url(https://fondosmil.com/fondo/1678.jpg)">
-            <div>
+            <div class="container">
                 <nav th:replace="nav-bar :: nav-bar-dark"></nav>
                 <br>
-                <br>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <br>
                 <div class="container"
                     style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19));width: 800px;  border-radius: 30px;">
@@ -20,7 +27,7 @@
                     <br>
                     <div style="text-align: center; justify-content: space-evenly; display: flex;">
                         <div
-                            style="opacity:100%;background-color: salmon; width:600px; height:350px; align-items: center;border-radius: 30px;">
+                            style="opacity:100%; background-color: whitesmoke;; width:600px; height:350px; align-items: center;border-radius: 30px;">
                             <br>
                             <br>
                             <br>
@@ -30,7 +37,6 @@
                                 <div class="mb-3">
                                     <br>
                                     <h4>Deshabilitar autor</h4>
-                                    <p th:if="${error != null}" th:text="${error}"></p>
                                     <br>
                                     <label class="form-label">Id autor</label>
                                     <input type="text" name="id">

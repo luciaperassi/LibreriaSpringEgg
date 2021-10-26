@@ -5,7 +5,7 @@ package com.egg.programacion.libreriaspring.exceptions;
  */
 public class ExceptionService extends Exception{
     
-    public ExceptionService (String excep){
+    public ExceptionService(String excep){
         super(excep);
     }
 }

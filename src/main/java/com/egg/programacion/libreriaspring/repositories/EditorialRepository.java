@@ -17,4 +17,7 @@ public interface EditorialRepository extends JpaRepository<Editorial, String>{
 
     @Query("select e from Editorial e where e.nombre LIKE :q")
     List<Editorial> findAllByQ(@Param("q") String q);
+    
+    @Query("select e from Editorial e where e.nombre = :q")
+    Editorial findByName(@Param("q") String q);
 }

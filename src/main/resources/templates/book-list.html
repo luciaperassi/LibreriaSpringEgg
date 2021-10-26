@@ -7,9 +7,18 @@
 
 <body>
   <div class="w-auto p-3"
-    style="background-image: url(https://fondosmil.com/fondo/1678.jpg); background-repeat: no-repeat;">
-    <div>
+    style="background-image: url(https://fondosmil.com/fondo/1678.jpg);">
+    <div class="container">
       <nav th:replace="nav-bar :: nav-bar-dark"></nav>
+      <br>
+      <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     </div>
     <br>
     <br>
@@ -47,8 +56,8 @@
               <th>Publicación</th>
               <!--<th>Ejemplares</th>
               <th>Prestados</th>
-                        <th>Restantes</th>
-              <th>Alta</th>-->
+                        <th>Restantes</th>-->
+              <th>Alta</th>
               <th>Autor</th>
               <th>Editorial</th>
               <th colspan="2">Acciones</th>
@@ -63,8 +72,8 @@
               <td th:text="${a.anio}"></td>
               <!--<td th:text="${a.ejemplares}"></td>
               <td th:text="${a.ejemplaresPrestados}"></td>
-                        <td th:text="${a.ejemplaresRestantes}"></td>
-              <td th:text="${a.alta}"></td>-->
+                        <td th:text="${a.ejemplaresRestantes}"></td>-->
+              <td th:text="${a.alta}"></td>
               <td th:text="${a.autor} == null ? 'No cargado/a' : ${a.autor.nombre}"></td>
               <td th:text="${a.editorial} == null ? 'No cargada' : ${a.editorial.nombre}"></td>
               <td>
@@ -82,11 +91,6 @@
       </div>
       <br>
       <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
 
       <div style="
                 align-items: center;
@@ -97,15 +101,19 @@
           <a th:href="@{/book}">Volver</a>
         </button>
         <button type="submit" class="btn btn-outline-light btn-dark">
-          <a th:href="@{/book/formnewbook}">Nuevo libro</a>
+          <a th:href="@{/book/formnewbook}" target="_blank">Nuevo libro</a>
         </button>
         <button type="button" class="btn btn-outline-light btn-dark">
-          <a th:href="@{/book/formdisablebook}">Deshab. libro</a>
+          <a th:href="@{/book/formdisablebook}" target="_blank">Deshab. libro</a>
         </button>
         <button type="button" class="btn btn-outline-light btn-dark">
-          <a th:href="@{/book/formenablebook}">Habilitar libro</a>
+          <a th:href="@{/book/formenablebook}" target="_blank">Habilitar libro</a>
         </button>
       </div>
+      <br>
+      <br>
+      <br>
+      <br>
       <br>
       <br>
       <br>

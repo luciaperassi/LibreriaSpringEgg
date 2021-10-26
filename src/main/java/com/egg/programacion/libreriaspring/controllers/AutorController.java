@@ -41,29 +41,36 @@ public class AutorController {
     }
 
     @GetMapping("/formnewautor")
-    public String formNewAutor(Model model, @RequestParam(required = false) String id) throws ExceptionService {
-        if (id != null) {
-            Optional<Autor> autor = autorservice.lookUp(id);
-            if (autor.isPresent()) {
-                model.addAttribute("autor", autor.get());
+    public String formNewAutor(Model model, @RequestParam(required = false) String id) {
+        try {
+            if (id != null) {
+                Optional<Autor> autor = autorservice.lookUp(id);
+                if (autor.isPresent()) {
+                    model.addAttribute("autor", autor.get());
+                } else {
+                    return "redirect:/autorlist";
+                }
             } else {
-                return "redirect:/autorlist";
+                model.addAttribute("autor", new Autor());
             }
-        } else {
-            model.addAttribute("autor", new Autor());
+        } catch (ExceptionService e) {
+                model.addAttribute("error",e.getMessage());
         }
+
         return "new-autor-form";
     }
 
     @PostMapping("/savenewautor")
-    public String saveNewAutor(RedirectAttributes redirectattributes, Model model, @ModelAttribute Autor autor) throws ExceptionService {
+    public String saveNewAutor(RedirectAttributes redirectattributes, Model model, @ModelAttribute Autor autor) {
         try {
             autorservice.newAutor(autor);
-            redirectattributes.addFlashAttribute("succes", "Autor guardado con éxito.");
+            redirectattributes.addFlashAttribute("success", "Autor/a guardado/a con éxito.");
+            return "redirect:/autor/autorlist";
         } catch (ExceptionService e) {
             redirectattributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:formnewautor";
         }
-        return "redirect:autorlist";
+        
     }
 
     @GetMapping("/formdisableautor")
@@ -72,14 +79,20 @@ public class AutorController {
     }
 
     @PostMapping("/disableautor")
-    public String disableAutor(ModelMap model, @RequestParam String id) throws ExceptionService {
-        try {
-            autorservice.disableAutor(id);
-            return "redirect:autorlist";
-        } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
+    public String disableAutor(RedirectAttributes redirectattributes, Model model, @RequestParam String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
             return "redirect:formdisableautor";
         }
+        try {
+            autorservice.disableAutor(id);
+            redirectattributes.addFlashAttribute("success", "Autor/a dado/a de baja con éxito.");
+            return "redirect:autorlist";
+        } catch (ExceptionService e) {
+            redirectattributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:formdisableautor";
+        }
+        
     }
 
     @GetMapping("/formdenableautor")
@@ -88,14 +101,20 @@ public class AutorController {
     }
 
     @PostMapping("/enableautor")
-    public String enableAutor(ModelMap model, @RequestParam String id) throws ExceptionService {
+    public String enableAutor(RedirectAttributes redirectattributes, Model model, @RequestParam String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
+            return "redirect:formdisableautor";
+        }
         try {
             autorservice.enableAutor(id);
+           redirectattributes.addFlashAttribute("success", "Autor/a dado/a de alta con éxito.");
             return "redirect:autorlist";
         } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
+            redirectattributes.addFlashAttribute("error", e.getMessage());
             return "redirect:formdenableautor";
         }
+        
     }
 
     @GetMapping("/delete")

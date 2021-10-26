@@ -35,6 +35,10 @@ public class BookService {
         if (book.getTitulo() == null || book.getTitulo().isEmpty()) {
             throw new ExceptionService("El titulo del libro no puede ser nulo.");
         }
+        
+        if (book.getIsbn() == null) {
+            throw new ExceptionService("El isbn del libro no puede ser nulo.");
+        }
 
         if (book.getEjemplaresPrestados() > book.getEjemplares()) {
             throw new ExceptionService("La cantidad de ejemplares prestados no puede superar la cantidad de ejemplares totales");
@@ -47,12 +51,20 @@ public class BookService {
         if (book.getEjemplaresPrestados() + book.getEjemplaresRestantes() > book.getEjemplares()) {
             throw new ExceptionService("La cantidad de ejemplares restantes + prestados no puede superar la cantidad de ejemplares totales");
         }
+        if(findByTittle(book.getTitulo()) != null){ //validacion de ingresos unicos de libros controlando los nombres
+            throw new ExceptionService("El título ingresado ya se encuentra registrado en la base de datos.");
+        }
+        
+        if(findByIsbn(book.getIsbn()) != null){ //validacion de ingresos unicos de libros controlando los isbn
+            throw new ExceptionService("El isbn ingresado ya se encuentra registrado en la base de datos.");
+        }
 
         if (book.getAutor() == null) {
             throw new ExceptionService("El/la autor/a del libro no puede ser nulo/a.");
         }else{
             book.setAutor(autorservice.findById(book.getAutor()));
         }
+        
 
         if (book.getEditorial() == null) {
             throw new ExceptionService("La editorial del libro no puede ser nula.");
@@ -168,6 +180,14 @@ public class BookService {
 
     public Optional<Book> lookForBook(String id) throws ExceptionService {
         return bookrepository.findById(id);
+    }
+    
+    public Book findByIsbn(Long isbn) throws ExceptionService {
+        return bookrepository.findByIsbn(isbn);
+    }
+    
+    public Book findByTittle(String tittle) throws ExceptionService {
+        return bookrepository.findByTittle(tittle);
     }
 
     public List<Book> listAll() {

@@ -13,11 +13,17 @@ and open the template in the editor.
 <body>
   <div>
     <div class="w-auto p-3" style="background-image: url(https://fondosmil.com/fondo/1678.jpg)">
-      <div>
+      <div  class="container">
         <nav th:replace="nav-bar :: nav-bar-dark"></nav>
         <br>
-        <br>
-        <br>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${error}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${success}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="container"
           style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19));width: 800px;  border-radius: 30px;">
           <br />
@@ -33,7 +39,6 @@ and open the template in the editor.
                   <br>
                   <h4>Cargar nuevo libro</h4>
                   <br>
-                  <p th:if="${error}" th:text="${error}"></p>
                   <label for="titulo" class="form-label">Titulo</label>
                   <input type="text" th:field="*{titulo}" placeholder="No quiero ser golondrina" />
                   <br>

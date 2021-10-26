@@ -15,4 +15,9 @@ public interface AutorRepository extends JpaRepository<Autor, String> {
 
     @Query("select a from Autor a where a.nombre LIKE :q")
     List<Autor> findAllByQ(@Param("q") String q);
+    
+    @Query("select a from Autor a where a.nombre = :q")
+    Autor findByName(@Param("q") String q);
+    
+    
 }

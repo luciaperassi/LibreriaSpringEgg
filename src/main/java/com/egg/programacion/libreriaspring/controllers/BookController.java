@@ -26,13 +26,12 @@ public class BookController {
 
     @Autowired
     private BookService bookservice;
-    
+
     @Autowired
     private AutorService autorservice;
-    
+
     @Autowired
     private EditorialService editorialservice;
-    
 
     @GetMapping
     public String book() {
@@ -51,19 +50,24 @@ public class BookController {
 
     //Carga la vista
     @GetMapping("/formnewbook")
-    public String formNewBook(Model model, @RequestParam(required = false) String id) throws ExceptionService {
-        if (id != null) {
-            Optional<Book> book = bookservice.lookForBook(id);
-            if (book.isPresent()) {
-                model.addAttribute("book", book.get());
+    public String formNewBook(Model model, @RequestParam(required = false) String id) {
+        try {
+            if (id != null) {
+                Optional<Book> book = bookservice.lookForBook(id);
+                if (book.isPresent()) {
+                    model.addAttribute("book", book.get());
+                } else {
+                    return "redirect:booklist";
+                }
             } else {
-                return "redirect:/booklist";
+                model.addAttribute("book", new Book());
             }
-        } else {
-            model.addAttribute("book", new Book());
+            model.addAttribute("autors", autorservice.listAll());
+            model.addAttribute("editorials", editorialservice.listAll());
+        } catch (ExceptionService e) {
+            model.addAttribute("error", e.getMessage());
         }
-        model.addAttribute("autors",autorservice.listAll());
-         model.addAttribute("editorials",editorialservice.listAll());
+
         return "new-book-form";
     }
 
@@ -72,11 +76,13 @@ public class BookController {
     public String saveNewBook(Model model, RedirectAttributes redirectattributes, @ModelAttribute Book book) {
         try {
             bookservice.newBook(book);
-            redirectattributes.addFlashAttribute("succes","Libro guardado con éxito.");      
+            redirectattributes.addFlashAttribute("success", "Libro guardado con éxito.");
+            return "redirect:booklist";
         } catch (ExceptionService e) {
-            redirectattributes.addFlashAttribute("error",e.getMessage());
+            redirectattributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:formnewbook";
         }
-         return "redirect:booklist";
+        
     }
 
     @GetMapping("/formdisablebook")
@@ -85,14 +91,18 @@ public class BookController {
     }
 
     @PostMapping("/disablebook")
-    public String disableBook(ModelMap model, String id) throws ExceptionService {
+    public String disableBook(Model model, RedirectAttributes redirectattributes, String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
+            return "redirect:formdisablebook";
+        }
         try {
             bookservice.disableBook(id);
-            return "redirect:booklist";
+            redirectattributes.addFlashAttribute("success", "Libro dado de baja con éxito.");
         } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
-            return "redirect:disablebook";
+            redirectattributes.addFlashAttribute("error", e.getMessage());
         }
+        return "redirect:booklist";
     }
 
     @GetMapping("/formenablebook")
@@ -101,14 +111,18 @@ public class BookController {
     }
 
     @PostMapping("/enablebook")
-    public String enableBook(ModelMap model, String id) throws ExceptionService {
+    public String enableBook(Model model, RedirectAttributes redirectattributes, String id) {
+        if(id.isEmpty()||id==null){
+            redirectattributes.addFlashAttribute("error","El id no puede ser nulo.");
+            return "redirect:formenablebook";
+        }
         try {
             bookservice.enableBook(id);
-            return "redirect:booklist";
+            redirectattributes.addFlashAttribute("success", "Libro dado de alta con éxito.");
         } catch (ExceptionService e) {
-            model.put("error", e.getMessage());
-            return "redirect:enablebook";
+            redirectattributes.addFlashAttribute("error", e.getMessage());
         }
+        return "redirect:booklist";
     }
 
     @GetMapping("/delete")

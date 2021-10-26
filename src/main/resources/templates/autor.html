@@ -7,97 +7,62 @@
   <body>
     <div>
       <div class="w-auto p-3" style="background-image: url(3.jpg)">
-        <div>
+        <div  class="container">
           <nav th:replace="nav-bar :: nav-bar-dark"></nav>
-          <br />
-          <br />
-          <br />
-          <div
-            class="container"
-            style="
-              background: radial-gradient(
-                600px,
-                rgba(71, 15, 15, 0.397),
-                rgb(20, 19, 19)
-              );
-              width: 800px;
-              border-radius: 30px;
-            "
-          >
-            <br />
-            <br />
-            <br />
+          <br>
+          <br>
+          <br>
+          <div class="container" style="background:radial-gradient(600px,rgba(71, 15, 15, 0.397),rgb(20, 19, 19));width: 800px;  border-radius: 30px;">
+            <br>
+            <br>
+            <br>
+            <div style="text-align: center; justify-content: space-evenly; display: flex;">
             <div
-              style="
-                text-align: center;
-                justify-content: space-evenly;
-                display: flex;
-              "
-            >
-              <div
-                style="
-                  opacity: 100%;
-                  background-color: rgba(128, 0, 0, 0.877);
-                  width: 600px;
-                  height: 200px;
-                  align-items: center;
-                  border-radius: 30px;
-                "
-              >
-                <br />
-                <h4
-                  style="
-                    font-family: Cambria, Cochin, Georgia, Times,
-                      'Times New Roman', serif;
-                    background-color: rgb(85, 83, 83);
-                    width: 300px;
-                    height: 35px;
-                  "
+              style="opacity:100%; background-color: whitesmoke;;width:600px; height:230px; align-items: center; border-radius: 30px;">
+              <br>
+              <h4 style=" font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;background-color: rgb(85, 83, 83); width: 300px; height: 35px;">Opciones para realizar:</h4>
+              <br />
+              <div style="justify-content: space-evenly; display: flex">
+                <button
+                  type="button"
+                  class="btn btn-outline-light btn-dark"
+                  style="width: 150px; height: 60px"
                 >
-                  Opciones para realizar:
-                </h4>
-                <br>
-                <div style="justify-content: space-evenly; display: flex">
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-dark"
-                    style="width: 150px; height: 60px"
-                  >
-                    <a th:href="@{/autor/formnewautor}">Cargar autor</a>
-                  </button>
-                  <button type="button" class="btn btn-outline-light btn-dark">
-                    <a th:href="@{/autor/autorlist}">Lista de autores</a>
-                  </button>
-                </div>
-                <br />
-                <br />
-                <br />
+                  <a th:href="@{/autor/formnewautor}">Cargar autor</a>
+                </button>
+                <button type="button" class="btn btn-outline-light btn-dark">
+                  <a th:href="@{/autor/autorlist}">Lista de autores</a>
+                </button>
               </div>
+              <br>
+              <br>
+              <br>
             </div>
-            <div
-              style="
-                align-items: center;
-                justify-content: center;
-                display: flex;
-              "
-            >
-              <button type="submit" class="btn btn-outline-light btn-dark">
-                <a th:href="@{/}">Volver</a>
-              </button>
-              <br />
-              <br />
-              <br />
-            </div>
+          </div>
+          <br>
+          <div style="
+                  align-items: center;
+                  justify-content: center;
+                  display: flex;
+                ">
+            <button type="submit" class="btn btn-outline-light btn-dark">
+              <a th:href="@{/}">Volver</a>
+            </button>
           </div>
           <br />
           <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
+          <br />
         </div>
+        <br>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
+    </div>
     </div>
   </body>
   <script

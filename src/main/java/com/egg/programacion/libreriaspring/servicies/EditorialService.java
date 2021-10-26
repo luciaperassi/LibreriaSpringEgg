@@ -20,7 +20,10 @@ public class EditorialService {
 
     @Transactional
     public Editorial newEditorial(Editorial editorial) throws ExceptionService {
-         if (editorial.getNombre().isEmpty() || editorial.getNombre() == null) {
+        if (findByName(editorial.getNombre()) != null) {
+            throw new ExceptionService("La editorial ya se encuentra registrada en la base de datos.");
+        }
+        if (editorial.getNombre().isEmpty() || editorial.getNombre() == null) {
             throw new ExceptionService("El nombre de la editorial no puede ser nulo.");
         }
         return editorialrepository.save(editorial);
@@ -36,36 +39,43 @@ public class EditorialService {
         return editorialrepository.save(editorial);
     }
 
-     @Transactional
-    public void delete(Editorial editorial){
+    @Transactional
+    public void delete(Editorial editorial) {
         editorialrepository.delete(editorial);
     }
-    
+
     @Transactional
-    public void deleteById(String id){
+    public void deleteById(String id) {
         Optional<Editorial> editorial = editorialrepository.findById(id);
         if (editorial.isPresent()) {
             editorialrepository.delete(editorial.get());
         }
-        
+
     }
 
     @Transactional
     public void disableEditorial(String id) throws ExceptionService {
-        Optional<Editorial> answer = editorialrepository.findById(id);
-        if (answer.isPresent()) {
-            Editorial editorial = answer.get();
-            editorial.setAlta(Boolean.FALSE);
-
-            editorialrepository.save(editorial);
+        if (id == null) {
+            throw new ExceptionService("El id no puede ser nulo.");
         } else {
-            throw new ExceptionService("No se encontró la editorial solicitada.");
+            Optional<Editorial> answer = editorialrepository.findById(id);
+            if (answer.isPresent()) {
+                Editorial editorial = answer.get();
+                editorial.setAlta(Boolean.FALSE);
+
+                editorialrepository.save(editorial);
+            } else {
+                throw new ExceptionService("No se encontró la editorial solicitada.");
+            }
         }
     }
 
     @Transactional
     public void enableAutor(String id) throws ExceptionService {
-        Optional<Editorial> answer = editorialrepository.findById(id);
+        if (id == null) {
+            throw new ExceptionService("El id no puede ser nulo.");
+        } else {
+            Optional<Editorial> answer = editorialrepository.findById(id);
         if (answer.isPresent()) {
             Editorial editorial = answer.get();
             editorial.setAlta(Boolean.TRUE);
@@ -74,6 +84,7 @@ public class EditorialService {
         } else {
             throw new ExceptionService("No se encontró la editorial solicitada.");
         }
+        }   
     }
 
     public Optional<Editorial> lookUp(String id) throws ExceptionService {
@@ -88,17 +99,21 @@ public class EditorialService {
 
     public Editorial findById(Editorial editorial) {
         Optional<Editorial> optional = editorialrepository.findById(editorial.getId());
-            if (optional.isPresent()) {
-                editorial = optional.get();
-            }
+        if (optional.isPresent()) {
+            editorial = optional.get();
+        }
         return editorial;
     }
-    
+
     public List<Editorial> listAll() {
         return editorialrepository.findAll();
     }
 
     public List<Editorial> listAllByQ(String q) {
         return editorialrepository.findAllByQ("%" + q + "%");
+    }
+
+    public Editorial findByName(String name) {
+        return editorialrepository.findByName(name);
     }
 }
